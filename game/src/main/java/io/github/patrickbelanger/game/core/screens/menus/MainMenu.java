@@ -11,14 +11,10 @@ import com.badlogic.gdx.graphics.GL20;
 import io.github.patrickbelanger.game.core.GameAssetManager;
 import io.github.patrickbelanger.game.core.types.MainMenuOptions;
 
-public class MainMenu extends BasicScreen {
-    private static final float INPUT_DELAY = 0.15f;
+public class MainMenu extends BaseScreen {
 
     private GameAssetManager assetManager;
     private BitmapFont font;
-    //private Rectangle mainMenuNewGameBound;
-    //private Rectangle mainMenuLoadGameBound;
-    //private Rectangle mainMenuQuitGameBound;
     private TextureRegion mainMenuBackground;
     private TextureRegion mainMenuTitle;
     private TextureRegion mainMenuPanel;
@@ -47,11 +43,6 @@ public class MainMenu extends BasicScreen {
         mainMenuTitle = new TextureRegion(assetManager.getTexture("main-menu-title.png"), 0, 0, 800, 600);
         mainMenuPanel = new TextureRegion(assetManager.getTexture("main-menu-panel.png"), 0, 0, 346, 124);
 
-        /* Mouse coordinate (need to debug)
-        mainMenuNewGameBound = new Rectangle(320, 235, 162, 42);
-        mainMenuLoadGameBound = new Rectangle(334, 208, 200, 42);
-        mainMenuQuitGameBound = new Rectangle(350, 180, 200, 42);
-        */
         font = assetManager.getFont("minecraft");
 
         batch.getProjectionMatrix().setToOrtho2D(0, 0, 800, 600);
@@ -88,46 +79,24 @@ public class MainMenu extends BasicScreen {
         timeSinceLastInput += delta;
 
         if (timeSinceLastInput >= INPUT_DELAY) {
-            if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY) || Gdx.input.justTouched()) {
-                System.out.println("Key pressed");
-                showMainMenuOptions = true;
-                timeSinceLastInput = 0;
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.ENTER) && showMainMenuOptions) {
                 performMainMenuAction();
                 timeSinceLastInput = 0;
             }
             if (showMainMenuOptions) {
                 updateMainMenuSelection();
             }
-        }
-
-        // Mouse
-        /* To debug
-        Vector2 touchPos = new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-
-        if (mainMenuNewGameBound.contains(touchPos)) {
-            mainMenuOptions = MainMenuOptions.NEW_GAME;
-            if (Gdx.input.isKeyPressed(Input.Keys.ENTER) || Gdx.input.justTouched()) {
-                performMainMenuAction();
-            }
-        } else if (mainMenuLoadGameBound.contains(touchPos)) {
-            mainMenuOptions = MainMenuOptions.LOAD_GAME;
-            if (Gdx.input.isKeyPressed(Input.Keys.ENTER) || Gdx.input.justTouched()) {
-                performMainMenuAction();
-            }
-        } else if (mainMenuQuitGameBound.contains(touchPos)) {
-            mainMenuOptions = MainMenuOptions.QUIT_GAME;
-            if (Gdx.input.isKeyPressed(Input.Keys.ENTER) || Gdx.input.justTouched()) {
-                performMainMenuAction();
+            if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY) || Gdx.input.justTouched()) {
+                showMainMenuOptions = true;
+                timeSinceLastInput = 0;
             }
         }
-        */
     }
 
     private void performMainMenuAction() {
         switch (mainMenuOptions) {
             case NEW_GAME:
+                game.setScreen(new CharacterSelectionMenu(game));
                 break;
             case LOAD_GAME:
                 break;
@@ -174,6 +143,8 @@ public class MainMenu extends BasicScreen {
         Gdx.app.debug("EOTAK", "dispose main menu");
         batch.dispose();
         mainMenuBackground.getTexture().dispose();
+        mainMenuPanel.getTexture().dispose();
+        mainMenuTitle.getTexture().dispose();
         assetManager.dispose();
     }
 }

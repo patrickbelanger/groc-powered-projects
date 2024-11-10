@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class MouseUtils {
     private final Vector2 initialClick = new Vector2();
-    private Rectangle drawnRectangle = new Rectangle();
+    private final Rectangle drawnRectangle = new Rectangle();
     private boolean isDragging = false;
 
     public void getMouseCoords(Batch batch, BitmapFont font) {
