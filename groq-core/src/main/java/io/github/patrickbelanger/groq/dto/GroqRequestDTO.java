@@ -17,18 +17,20 @@
 
 package io.github.patrickbelanger.groq.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.patrickbelanger.groq.dto.requests.MessageDTO;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GroqRequestDTO {
     private List<MessageDTO> messages;
     private String model;
     private float temperature;
     @JsonProperty("max_tokens")
-    private int maxTokens;
+    private int maxTokens = 1024;
     private String stop = "None";
     private boolean stream;
 
